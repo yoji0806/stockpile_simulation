@@ -1,6 +1,6 @@
-# Docker Dash (Plotly)
+# Stockpile Simulatior
 
-Dockerize a Python Dash app for quick prototyping.
+Prototype for KOBE078 in 2022 exhibition booth.
 
 ## Build and run
 
