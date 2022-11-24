@@ -1,0 +1,6 @@
+dash
+plotly
+pandas
+gunicorn
+dash_deck
+pydeck
