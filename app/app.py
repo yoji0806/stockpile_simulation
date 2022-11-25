@@ -1,90 +1,156 @@
-"""
-Adapted from: https://pydeck.gl/gallery/arc_layer.html
-
-Map of commutes to work within a segment of downtown San Francisco using a
-deck.gl ArcLayer.
-
-Green indicates a start point, and red indicates the destination.
-
-The data is collected by the US Census Bureau and viewable in the 2017
-LODES data set: https://lehd.ces.census.gov/data/
-"""
-
-import os
-
-import dash
-import dash_deck
-import dash_html_components as html
-import pydeck as pdk
 import pandas as pd
+import numpy as np
+import dash                     #(version 1.0.0)
+import dash_table
+import dash_core_components as dcc
+import dash_html_components as html
+from dash.dependencies import Input, Output
 
-# mapbox_api_token = os.getenv("MAPBOX_ACCESS_TOKEN")
+import plotly.offline as py     #(version 4.4.1)
+import plotly.graph_objs as go
+
+
 mapbox_access_token = 'pk.eyJ1IjoieW9qaTEyMzQiLCJhIjoiY2xhcDhnOTdpMTdjdjNvbGJja2JmeXZneiJ9.A-hjQjrMAB0PXHk5vcHhhw'
-mapbox_api_token = mapbox_access_token
 
 
-DATA_URL = "https://raw.githubusercontent.com/ajduberstein/sf_public_data/master/bay_area_commute_routes.csv"
-# A bounding box for downtown San Francisco, to help filter this commuter data
-DOWNTOWN_BOUNDING_BOX = [
-    -122.43135291617365,
-    37.766492914983864,
-    -122.38706428091974,
-    37.80583561830737,
-]
+
+df_scatter_map = pd.read_csv("wip_kobe_evacuation_sites.csv")
+
+external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
+app = dash.Dash()
+app.config.external_stylesheets = external_stylesheets
 
 
-def in_bounding_box(point):
-    """Determine whether a point is in our downtown bounding box"""
-    lng, lat = point
-    in_lng_bounds = DOWNTOWN_BOUNDING_BOX[0] <= lng <= DOWNTOWN_BOUNDING_BOX[2]
-    in_lat_bounds = DOWNTOWN_BOUNDING_BOX[1] <= lat <= DOWNTOWN_BOUNDING_BOX[3]
-    return in_lng_bounds and in_lat_bounds
+blackbold={'color':'black', 'font-weight': 'bold'}
 
+app.layout = html.Div([
+#---------------------------------------------------------------
+# Map_legen + Borough_checklist + Recycling_type_checklist + Web_link + Map
+    html.Div([
+        html.Div([
+            # Map-legend
+            html.Ul([
+                html.Li("Compost", className='circle', style={'background': '#ff00ff','color':'black',
+                    'list-style':'none','text-indent': '17px'}),
+                html.Li("Electronics", className='circle', style={'background': '#0000ff','color':'black',
+                    'list-style':'none','text-indent': '17px','white-space':'nowrap'}),
+                html.Li("Hazardous_waste", className='circle', style={'background': '#FF0000','color':'black',
+                    'list-style':'none','text-indent': '17px'}),
+                html.Li("Plastic_bags", className='circle', style={'background': '#00ff00','color':'black',
+                    'list-style':'none','text-indent': '17px'}),
+                html.Li("Recycling_bins", className='circle',  style={'background': '#824100','color':'black',
+                    'list-style':'none','text-indent': '17px'}),
+            ], style={'border-bottom': 'solid 3px', 'border-color':'#00FC87','padding-top': '6px'}
+            ),
 
-df = pd.read_csv(DATA_URL)
-# Filter to bounding box
-df = df[df[["lng_w", "lat_w"]].apply(lambda row: in_bounding_box(row), axis=1)]
+            # Borough_checklist
+            html.Label(children=['Borough: '], style=blackbold),
+            dcc.Checklist(id='boro_name',
+                    options=[{'label':str(b),'value':b} for b in sorted(df_scatter_map['boro'].unique())],
+                    value=[b for b in sorted(df_scatter_map['boro'].unique())],
+            ),
 
-GREEN_RGB = [0, 255, 0, 40]
-RED_RGB = [240, 100, 0, 40]
+            # Recycling_type_checklist
+            html.Label(children=['対象: '], style=blackbold),
+            dcc.Checklist(id='recycling_type',
+                    options=[{'label':str(b),'value':b} for b in sorted(df_scatter_map['type'].unique())],
+                    value=[b for b in sorted(df_scatter_map['type'].unique())],
+            ),
 
-# Specify a deck.gl ArcLayer
-arc_layer = pdk.Layer(
-    "ArcLayer",
-    data=df,
-    get_width="S000 * 2",
-    get_source_position=["lng_h", "lat_h"],
-    get_target_position=["lng_w", "lat_w"],
-    get_tilt=15,
-    get_source_color=RED_RGB,
-    get_target_color=GREEN_RGB,
-    pickable=True,
-    auto_highlight=True,
+            # Web_link
+            html.Br(),
+            html.Label(['Website:'],style=blackbold),
+            html.Pre(id='web_link', children=[],
+            style={'white-space': 'pre-wrap','word-break': 'break-all',
+                 'border': '1px solid black','text-align': 'center',
+                 'padding': '12px 12px 12px 12px', 'color':'blue',
+                 'margin-top': '3px'}
+            ),
+
+        ], className='three columns'
+        ),
+
+        # Map
+        html.Div([
+            dcc.Graph(id='graph', config={'displayModeBar': False, 'scrollZoom': True},
+                style={'background':'#00FC87','padding-bottom':'2px','padding-left':'2px','height':'100vh'}
+            )
+        ], className='nine columns'
+        ),
+
+    ], className='row'
+    ),
+
+], className='ten columns offset-by-one'
 )
 
-view_state = pdk.ViewState(
-    latitude=37.7576171, longitude=-122.5776844, bearing=45, pitch=50, zoom=8,
-)
+#---------------------------------------------------------------
+# Output of Graph
+@app.callback(Output('graph', 'figure'),
+              [Input('boro_name', 'value'),
+               Input('recycling_type', 'value')])
 
+def update_figure(chosen_boro,chosen_recycling):
+    df_sub = df_scatter_map[(df_scatter_map['boro'].isin(chosen_boro)) &
+                (df_scatter_map['type'].isin(chosen_recycling))]
 
-TOOLTIP_TEXT = {
-    "html": "{S000} jobs <br /> Home of commuter in red; work location in green"
-}
-#r = pdk.Deck(arc_layer, initial_view_state=view_state, mapbox_key=mapbox_api_token,)
-r = pdk.Deck(arc_layer, initial_view_state=view_state)
+    # Create figure
+    locations=[go.Scattermapbox(
+                    lon = df_sub['longitude'],
+                    lat = df_sub['latitude'],
+                    mode='markers',
+                    marker={'color' : df_sub['color']},
+                    unselected={'marker' : {'opacity':1}},
+                    selected={'marker' : {'opacity':0.5, 'size':25}},
+                    hoverinfo='text',
+                    hovertext=df_sub['hov_txt'],
+                    customdata=df_sub['website']
+    )]
 
-
-app = dash.Dash(__name__)
-
-app.layout = html.Div(
-    dash_deck.DeckGL(
-        r.to_json(), id="deck-gl", tooltip=TOOLTIP_TEXT, mapboxKey=mapbox_api_token
-    )
-)
-
-
+    # Return figure
+    return {
+        'data': locations,
+        'layout': go.Layout(
+            uirevision= 'foo', #preserves state of figure/map after callback activated
+            clickmode= 'event+select',
+            hovermode='closest',
+            hoverdistance=2,
+            title=dict(text="078KOBE 備蓄の需要シミュレーション",font=dict(size=50, color='green')),
+            mapbox=dict(
+                accesstoken=mapbox_access_token,
+                bearing=25,
+                style='light',
+                center=dict(
+                    lat=34.72481,
+                    lon=135.29442
+                ),
+                pitch=40,
+                zoom=11.5
+            ),
+        )
+    }
+#---------------------------------------------------------------
+# callback for Web_link
+@app.callback(
+    Output('web_link', 'children'),
+    [Input('graph', 'clickData')])
+def display_click_data(clickData):
+    if clickData is None:
+        return 'Click on any bubble'
+    else:
+        # print (clickData)
+        the_link=clickData['points'][0]['customdata']
+        if the_link is None:
+            return 'No Website Available'
+        else:
+            return html.A(the_link, href=the_link, target="_blank")
+# #--------------------------------------------------------------
 
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port="8050", debug=False)
+    app.run(host="0.0.0.0", port="8050", debug=True)
+
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port="8050", debug=True)
