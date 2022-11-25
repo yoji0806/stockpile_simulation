@@ -1,4 +1,3 @@
-
 import pandas as pd
 import numpy as np
 import dash                     #(version 1.0.0)
@@ -11,13 +10,16 @@ import plotly.offline as py     #(version 4.4.1)
 import plotly.graph_objs as go
 
 
-mapbox_access_token = 'pk.eyJ1IjoieW9qaTEyMzQiLCJhIjoiY2xhcDhnOTdpMTdjdjNvbGJja2JmeXZneiJ9.A-hjQjrMAB0PXHk5vcHhhw'
+with open('.mapbox_token', 'r') as file:
+    mapbox_access_token = file.read().rstrip()
 
 
+df_scatter_map = pd.read_csv("wip_kobe_evacuation_sites.csv")
 
-df = pd.read_csv("wip_kobe_evacuation_sites.csv")
+external_stylesheets = ['app/assets/stylesheet.css']
+app = dash.Dash()
+app.config.external_stylesheets = external_stylesheets
 
-app = dash.Dash(__name__)
 
 blackbold={'color':'black', 'font-weight': 'bold'}
 
@@ -44,15 +46,15 @@ app.layout = html.Div([
             # Borough_checklist
             html.Label(children=['Borough: '], style=blackbold),
             dcc.Checklist(id='boro_name',
-                    options=[{'label':str(b),'value':b} for b in sorted(df['boro'].unique())],
-                    value=[b for b in sorted(df['boro'].unique())],
+                    options=[{'label':str(b),'value':b} for b in sorted(df_scatter_map['boro'].unique())],
+                    value=[b for b in sorted(df_scatter_map['boro'].unique())],
             ),
 
             # Recycling_type_checklist
             html.Label(children=['対象: '], style=blackbold),
             dcc.Checklist(id='recycling_type',
-                    options=[{'label':str(b),'value':b} for b in sorted(df['type'].unique())],
-                    value=[b for b in sorted(df['type'].unique())],
+                    options=[{'label':str(b),'value':b} for b in sorted(df_scatter_map['type'].unique())],
+                    value=[b for b in sorted(df_scatter_map['type'].unique())],
             ),
 
             # Web_link
@@ -65,7 +67,7 @@ app.layout = html.Div([
                  'margin-top': '3px'}
             ),
 
-        ], className='three columns'
+        ], className='two columns'
         ),
 
         # Map
@@ -73,7 +75,7 @@ app.layout = html.Div([
             dcc.Graph(id='graph', config={'displayModeBar': False, 'scrollZoom': True},
                 style={'background':'#00FC87','padding-bottom':'2px','padding-left':'2px','height':'100vh'}
             )
-        ], className='nine columns'
+        ], className='ten columns'
         ),
 
     ], className='row'
@@ -89,8 +91,8 @@ app.layout = html.Div([
                Input('recycling_type', 'value')])
 
 def update_figure(chosen_boro,chosen_recycling):
-    df_sub = df[(df['boro'].isin(chosen_boro)) &
-                (df['type'].isin(chosen_recycling))]
+    df_sub = df_scatter_map[(df_scatter_map['boro'].isin(chosen_boro)) &
+                (df_scatter_map['type'].isin(chosen_recycling))]
 
     # Create figure
     locations=[go.Scattermapbox(
@@ -147,4 +149,8 @@ def display_click_data(clickData):
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port="8050", debug=False)
+    app.run(host="0.0.0.0", port="8050", debug=True)
+
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port="8050", debug=True)

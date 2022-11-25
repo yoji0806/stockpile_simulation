@@ -10,8 +10,8 @@ import plotly.offline as py     #(version 4.4.1)
 import plotly.graph_objs as go
 
 
-mapbox_access_token = 'pk.eyJ1IjoieW9qaTEyMzQiLCJhIjoiY2xhcDhnOTdpMTdjdjNvbGJja2JmeXZneiJ9.A-hjQjrMAB0PXHk5vcHhhw'
-
+with open('.mapbox_token', 'r') as file:
+    mapbox_access_token = file.read().rstrip()
 
 
 df_scatter_map = pd.read_csv("wip_kobe_evacuation_sites.csv")
@@ -23,10 +23,51 @@ app.config.external_stylesheets = external_stylesheets
 
 blackbold={'color':'black', 'font-weight': 'bold'}
 
+
+
+# Radar chart
+radar_chart = go.Figure()
+categories = ['飲料水','食料','簡易トイレ',
+              '赤ちゃん用品', '女性の生活用品', '高齢者の生活用品']
+radar_chart.add_trace(go.Scatterpolar(
+      r=[1, 5, 2, 2, 3, 4],
+      theta=categories,
+      fill='toself',
+      name='必要とされる量'
+))
+radar_chart.add_trace(go.Scatterpolar(
+      r=[4.0, 3.1, 2.5, 1.1, 1.4, 1.8],
+      theta=categories,
+      fill='toself',
+      name='実際の備蓄量'
+))
+
+radar_chart.update_layout(
+  polar=dict(
+    radialaxis=dict(
+      visible=True,
+      range=[0, 5]
+    )),
+  showlegend=True
+)
+
+
+
+
 app.layout = html.Div([
 #---------------------------------------------------------------
-# Map_legen + Borough_checklist + Recycling_type_checklist + Web_link + Map
+
+    # first row
     html.Div([
+
+        # Map
+        html.Div([
+            dcc.Graph(id='graph', config={'displayModeBar': False, 'scrollZoom': True},
+                style={'background':'#00FC87','height':'65vh'}
+            )
+        ], className='ten columns'
+        ),
+
         html.Div([
             # Map-legend
             html.Ul([
@@ -66,22 +107,38 @@ app.layout = html.Div([
                  'padding': '12px 12px 12px 12px', 'color':'blue',
                  'margin-top': '3px'}
             ),
+        ], className='two columns'),
 
-        ], className='three columns'
-        ),
+    ], 
+    className='row'),
 
-        # Map
+
+    # second row 
+    html.Div([
+        
+        # Radar chart 1
         html.Div([
-            dcc.Graph(id='graph', config={'displayModeBar': False, 'scrollZoom': True},
-                style={'background':'#00FC87','padding-bottom':'2px','padding-left':'2px','height':'100vh'}
-            )
-        ], className='nine columns'
-        ),
+            dcc.Graph(figure=radar_chart),
+            html.H4('災害発生から1日後'),
+        ], className='four columns', style={'text-align':'center'}),
 
-    ], className='row'
-    ),
+        # Radar chart 2
+        html.Div([
+            dcc.Graph(figure=radar_chart),
+            html.H4('2日後'),
+        ], className='four columns', style={'text-align':'center'}),
 
-], className='ten columns offset-by-one'
+        # Radar chart 3
+        html.Div([
+            dcc.Graph(figure=radar_chart),
+            html.H4('3日後'),
+        ], className='four columns', style={'text-align':'center'}),
+
+    ], className='row',style={'margin':'0dp', 'padding':'0dp'})
+
+
+
+], className='ten columns offset-by-one',style={'margin':'0dp', 'padding':'0dp'}
 )
 
 #---------------------------------------------------------------
