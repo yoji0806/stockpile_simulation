@@ -175,14 +175,14 @@ def update_figure(chosen_boro,chosen_recycling):
             title=dict(text="078KOBE 備蓄の需要シミュレーション",font=dict(size=50, color='green')),
             mapbox=dict(
                 accesstoken=mapbox_access_token,
-                bearing=25,
+                bearing=0,
                 style='light',
                 center=dict(
                     lat=34.72481,
                     lon=135.29442
                 ),
-                pitch=40,
-                zoom=11.5
+                pitch=50,
+                zoom=12
             ),
         )
     }
