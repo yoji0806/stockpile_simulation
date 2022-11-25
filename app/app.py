@@ -71,16 +71,16 @@ app.layout = html.Div([
         html.Div([
             # Map-legend
             html.Ul([
-                html.Li("Compost", className='circle', style={'background': '#ff00ff','color':'black',
+                html.Li("避難所", className='circle', style={'background': '#ff00ff','color':'black',
                     'list-style':'none','text-indent': '17px'}),
-                html.Li("Electronics", className='circle', style={'background': '#0000ff','color':'black',
+                html.Li("災害時こまらんトイレ", className='circle', style={'background': '#824100','color':'black',
                     'list-style':'none','text-indent': '17px','white-space':'nowrap'}),
-                html.Li("Hazardous_waste", className='circle', style={'background': '#FF0000','color':'black',
+                html.Li("災害時給水拠点", className='circle', style={'background': '#0000ff','color':'black',
                     'list-style':'none','text-indent': '17px'}),
-                html.Li("Plastic_bags", className='circle', style={'background': '#00ff00','color':'black',
-                    'list-style':'none','text-indent': '17px'}),
-                html.Li("Recycling_bins", className='circle',  style={'background': '#824100','color':'black',
-                    'list-style':'none','text-indent': '17px'}),
+                # html.Li("Plastic_bags", className='circle', style={'background': '#00ff00','color':'black',
+                #     'list-style':'none','text-indent': '17px'}),
+                # html.Li("Recycling_bins", className='circle',  style={'background': '#FF0000','color':'black',
+                #     'list-style':'none','text-indent': '17px'}),
             ], style={'border-bottom': 'solid 3px', 'border-color':'#00FC87','padding-top': '6px'}
             ),
 
@@ -91,22 +91,22 @@ app.layout = html.Div([
                     value=[b for b in sorted(df_scatter_map['boro'].unique())],
             ),
 
-            # Recycling_type_checklist
-            html.Label(children=['対象: '], style=blackbold),
-            dcc.Checklist(id='recycling_type',
-                    options=[{'label':str(b),'value':b} for b in sorted(df_scatter_map['type'].unique())],
-                    value=[b for b in sorted(df_scatter_map['type'].unique())],
-            ),
+            # # Recycling_type_checklist
+            # html.Label(children=['対象: '], style=blackbold),
+            # dcc.Checklist(id='recycling_type',
+            #         options=[{'label':str(b),'value':b} for b in sorted(df_scatter_map['type'].unique())],
+            #         value=[b for b in sorted(df_scatter_map['type'].unique())],
+            # ),
 
             # Web_link
-            html.Br(),
-            html.Label(['Website:'],style=blackbold),
-            html.Pre(id='web_link', children=[],
-            style={'white-space': 'pre-wrap','word-break': 'break-all',
-                 'border': '1px solid black','text-align': 'center',
-                 'padding': '12px 12px 12px 12px', 'color':'blue',
-                 'margin-top': '3px'}
-            ),
+            # html.Br(),
+            # html.Label(['Website:'],style=blackbold),
+            # html.Pre(id='web_link', children=[],
+            # style={'white-space': 'pre-wrap','word-break': 'break-all',
+            #      'border': '1px solid black','text-align': 'center',
+            #      'padding': '12px 12px 12px 12px', 'color':'blue',
+            #      'margin-top': '3px'}
+            # ),
         ], className='two columns'),
 
     ], 
@@ -138,18 +138,18 @@ app.layout = html.Div([
 
 
 
-], className='ten columns offset-by-one',style={'margin':'0dp', 'padding':'0dp'}
+], className='ten columns offset-by-one'
 )
 
 #---------------------------------------------------------------
 # Output of Graph
-@app.callback(Output('graph', 'figure'),
-              [Input('boro_name', 'value'),
-               Input('recycling_type', 'value')])
+@app.callback(
+    Output('graph', 'figure'),
+    Input('boro_name', 'value')
+    )
 
-def update_figure(chosen_boro,chosen_recycling):
-    df_sub = df_scatter_map[(df_scatter_map['boro'].isin(chosen_boro)) &
-                (df_scatter_map['type'].isin(chosen_recycling))]
+def update_figure(chosen_boro):
+    df_sub = df_scatter_map[(df_scatter_map['boro'].isin(chosen_boro))]
 
     # Create figure
     locations=[go.Scattermapbox(
@@ -186,27 +186,10 @@ def update_figure(chosen_boro,chosen_recycling):
             ),
         )
     }
-#---------------------------------------------------------------
-# callback for Web_link
-@app.callback(
-    Output('web_link', 'children'),
-    [Input('graph', 'clickData')])
-def display_click_data(clickData):
-    if clickData is None:
-        return 'Click on any bubble'
-    else:
-        # print (clickData)
-        the_link=clickData['points'][0]['customdata']
-        if the_link is None:
-            return 'No Website Available'
-        else:
-            return html.A(the_link, href=the_link, target="_blank")
-# #--------------------------------------------------------------
 
 
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port="8050", debug=True)
+
 
 
 if __name__ == "__main__":
