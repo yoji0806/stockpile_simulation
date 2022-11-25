@@ -4,3 +4,4 @@ pandas
 gunicorn
 dash_deck
 pydeck
+requests

@@ -130,3 +130,5 @@ dmypy.json
 
 
 .mapbox_token
+.gcp_spreadsheet_id
+.gcp_spreadsheet_token
