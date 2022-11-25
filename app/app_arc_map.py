@@ -74,7 +74,7 @@ view_state = pdk.ViewState(
 
 
 TOOLTIP_TEXT = {
-    "html": "{S000}人 <br /> オレンジ：災害時の場所　緑：避難所"
+    "html": "{S000}人 (避難所計：{sum_p})人<br /> 移動距離：{dis}km"
 }
 #r = pdk.Deck(arc_layer, initial_view_state=view_state, mapbox_key=mapbox_api_token,)
 r = pdk.Deck(arc_layer, initial_view_state=view_state)
