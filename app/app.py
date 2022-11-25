@@ -16,7 +16,7 @@ mapbox_access_token = 'pk.eyJ1IjoieW9qaTEyMzQiLCJhIjoiY2xhcDhnOTdpMTdjdjNvbGJja2
 
 df_scatter_map = pd.read_csv("wip_kobe_evacuation_sites.csv")
 
-external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
+external_stylesheets = ['app/assets/stylesheet.css']
 app = dash.Dash()
 app.config.external_stylesheets = external_stylesheets
 
