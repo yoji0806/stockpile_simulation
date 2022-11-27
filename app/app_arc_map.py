@@ -25,7 +25,7 @@ with open('.mapbox_token', 'r') as file:
 mapbox_api_token = mapbox_access_token
 
 
-DATA_URL = "./assets/df_data_chuo_portisland.csv"
+DATA_URL = "./assets/df_evacuee_data_kobe_chuo_portisland.csv.csv"
 
 # A bounding box for downtown San Francisco, to help filter this commuter data
 DOWNTOWN_BOUNDING_BOX = [

@@ -24,7 +24,7 @@ with open('.gcp_spreadsheet_token', 'r') as file:
     gcp_spreadsheet_token = file.read().rstrip()
 
 
-df_scatter_map = pd.read_csv("./assets/df_disaster_related_site.csv")
+df_scatter_map = pd.read_csv("./assets/df_disaster_related_site_kobe.csv")
 
 external_stylesheets = ['app/assets/stylesheet.css']
 app = dash.Dash()
@@ -154,12 +154,13 @@ for i in range(1,len_v):
     elif (answer_15 != '会社'):
         
         # （性別・年齢に関わらず）人数の影響を受ける備蓄：
+        #TODO: 何人分のデータがあっても、正しい値が出るように正規化する。
         effect_on_water +=  1/3
         effect_on_food +=  1/3
         effect_on_toilet +=  1/3
         
         if gender == '女性':
-            effect_on_women += 1/3
+            effect_on_women += 2 #1/3
             
 
         
@@ -194,7 +195,7 @@ elderly_real += effect_on_elderly
 radar_1st_real =  [
     water_real,
     food_real,
-    toilet_real,
+    toilet_real, 
     baby_real,
     woman_real,
     elderly_real
@@ -358,7 +359,7 @@ app.layout = html.Div([
             dcc.Checklist(id='kind',
                     options=[{'label':str(b),'value':b} for b in sorted(df_scatter_map['kind'].unique())],
                     value=[b for b in sorted(df_scatter_map['kind'].unique())],
-            ),
+            ), 
 
         ], className='two columns'),
 
@@ -392,7 +393,7 @@ app.layout = html.Div([
 
 
 ], className='ten columns offset-by-one'
-)
+) 
 
 #---------------------------------------------------------------
 # Output of Graph
