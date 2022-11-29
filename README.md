@@ -43,5 +43,8 @@ cat app/requirements.txt | xargs poetry add
 
 # CopyRight
 
-- a dash prototype environment
+Copyright (c) 2022 Yoji 
+
+## Others
+- a dash prototype environment  
 Copyright (c) 2019 Jucy Technologies, Inc.
