@@ -1,4 +1,4 @@
-# Stockpile Simulatior
+# Stockpile demand × Evacuee Simulatior
 
 Prototype for KOBE078 in 2022 exhibition booth.
 
