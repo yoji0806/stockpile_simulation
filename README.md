@@ -1,6 +1,9 @@
 # Stockpile demand × Evacuee Simulatior
 
-Prototype for KOBE078 in 2022 exhibition booth.
+Prototype for KOBE078 in 2022 exhibition booth.  
+This contains two simulators.
+- stockpile demand simulator.
+- evacuee simulator.
 
 ## Build and run
 
@@ -15,6 +18,10 @@ docker run -p 8050:8050 -v "$(pwd)"/app:/app --name xxx_dev dash-prototype
 docker build -f Dockerfile -t docker-dash-example-prod .
 docker run -p 8050:8050 -v "$(pwd)"/app:/app --name xxx_prod --rm docker-dash-prod
 ```
+
+By default, it runs the stockpile demand simulator.  
+To run the evacuee simulator, use `app_arc_map.py` with other port.
+
 
 ## Access the page
 
