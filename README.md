@@ -5,6 +5,27 @@ This contains two simulators.
 - stockpile demand simulator.
 - evacuee simulator.
 
+<br />
+
+
+image.1 stockpile demand simulator
+
+<img width="800" alt="stockpile demand simulator" src="https://user-images.githubusercontent.com/40899163/210713434-302f6b98-e16e-45d7-9ad7-735a4e701c0b.jpg">
+<br /><br />  
+
+
+image.2 evacuee simulator
+
+<img width="800" alt="evacuee simulator" src="https://user-images.githubusercontent.com/40899163/210713205-f5b239c1-6d2d-430e-a0fc-6993ab813155.png">
+<br /><br />
+
+
+
+
+
+
+
+
 ## Build and run
 
 `prod` version is served by `gunicorn` instead of the `flask` dev server.
