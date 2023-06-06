@@ -25,7 +25,9 @@ with open('.mapbox_token', 'r') as file:
 mapbox_api_token = mapbox_access_token
 
 
-DATA_URL = "./assets/df_evacuee_data_kobe_chuo_portisland.csv.csv"
+DATA_URL = "./assets/df_evacuee_data_kobe_chuo_portisland_rounded.csv"
+
+
 
 # A bounding box for downtown San Francisco, to help filter this commuter data
 DOWNTOWN_BOUNDING_BOX = [
@@ -71,6 +73,8 @@ arc_layer = pdk.Layer(
 view_state = pdk.ViewState(
     latitude=34.72481, longitude=135.29442, bearing=0, pitch=50, zoom=12,
 )
+
+
 
 
 TOOLTIP_TEXT = {
