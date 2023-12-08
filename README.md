@@ -1,6 +1,6 @@
 # 概要（Japanese）
 
-![2023年度グッドデザイン・ニューホープ賞__1__key](https://github.com/yoji0806/stockpile_simulation/assets/40899163/b5c95211-4664-4824-8245-c78f53822815)
+![概要(Japanese)](https://github.com/yoji0806/stockpile_simulation/assets/40899163/b5c95211-4664-4824-8245-c78f53822815)
 
 
 
