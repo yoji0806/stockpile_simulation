@@ -1,3 +1,10 @@
+# 概要（Japanese）
+
+![2023年度グッドデザイン・ニューホープ賞__1__key](https://github.com/yoji0806/stockpile_simulation/assets/40899163/b5c95211-4664-4824-8245-c78f53822815)
+
+
+
+
 # Stockpile Demand Simulator × Evacuee Simulatior
 
 This contains two simulators.
@@ -17,6 +24,7 @@ image.2 evacuee simulator
 
 <img width="800" alt="evacuee simulator" src="https://user-images.githubusercontent.com/40899163/210713205-f5b239c1-6d2d-430e-a0fc-6993ab813155.png">
 <br /><br />
+
 
 
 
