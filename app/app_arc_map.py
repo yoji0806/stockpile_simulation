@@ -10,7 +10,6 @@ The data is collected by the US Census Bureau and viewable in the 2017
 LODES data set: https://lehd.ces.census.gov/data/
 """
 
-import os
 
 import dash
 import dash_deck
