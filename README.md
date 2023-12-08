@@ -1,3 +1,9 @@
+# 概要（Japanese）
+
+
+[概要.pdf](https://github.com/yoji0806/stockpile_simulation/files/13615809/default.pdf)
+
+
 # Stockpile Demand Simulator × Evacuee Simulatior
 
 This contains two simulators.
@@ -17,6 +23,7 @@ image.2 evacuee simulator
 
 <img width="800" alt="evacuee simulator" src="https://user-images.githubusercontent.com/40899163/210713205-f5b239c1-6d2d-430e-a0fc-6993ab813155.png">
 <br /><br />
+
 
 
 
