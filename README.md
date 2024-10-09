@@ -1,5 +1,5 @@
 
-# Summary （English）
+# About the Project （English）
 ![English ver  2023年度グッドデザイン・ニューホープ賞 001](https://github.com/user-attachments/assets/2251e4da-ac47-4528-92d2-4bcdbb550577)
 
 
