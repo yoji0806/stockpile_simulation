@@ -1,12 +1,16 @@
 
-# About the Project （English）
+# [About the Project （English）](https://drive.google.com/file/d/1akOgm2fEs7MvnehQIvKutytBIMOo1fe8/view?usp=sharing)
 ![English ver  2023年度グッドデザイン・ニューホープ賞 001](https://github.com/user-attachments/assets/2251e4da-ac47-4528-92d2-4bcdbb550577)
 
+
+### a poster url: https://drive.google.com/file/d/1akOgm2fEs7MvnehQIvKutytBIMOo1fe8/view?usp=sharing
 
 
 # 概要（Japanese）
 
 ![概要(Japanese)](https://github.com/yoji0806/stockpile_simulation/assets/40899163/b5c95211-4664-4824-8245-c78f53822815)
+
+<br />
 
 
 
